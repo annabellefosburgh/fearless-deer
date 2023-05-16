@@ -2,7 +2,7 @@
 const fs = require('fs');
 const express = require('express');
 const path = require('path');
-const noteList = require('./db/db.json');
+const router = require('./router/routes.js')
 
 //Initializing express
 const app = express();
@@ -17,14 +17,4 @@ app.use(express.static('public'));
 function writeNote()
 
 //A function used to delete a note ((BONUS, FINISH LAST))
-
-//A get request for the list of all notes taken
-app.get('./db/db.json', (req, res) => {
-
-    res.send()
-})
-
-//A get request for a new note taken
-app.get('./db.json/new', (req, res) => {
-
-})
+function deleteNote()
