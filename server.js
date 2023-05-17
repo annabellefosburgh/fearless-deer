@@ -1,7 +1,8 @@
 //Requiring all docs and information being used in the server file.
 const fs = require('fs');
 const express = require('express');
-const route = require('./router/noteRoutes.js')
+const noteRoute = require(noteRoutes)
+const htmlRoute = require(htmlRoutes);
 
 //Initializing express
 const app = express();
@@ -11,7 +12,8 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
-app.use('/', )
+app.use('/', htmlRoute);
+app.use('api/', noteRoute);
 
 app.listen(PORT, () => {
     console.log("Port is running");

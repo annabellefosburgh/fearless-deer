@@ -2,37 +2,39 @@
 const fs = require('fs');
 const route = require('express').Router();
 
-//Setting up notes variable for router
-fs.readFile("./db/db.json", (data) => {
-    var notes = JSON.parse(data)
-});
+module.exports = noteRoutes => {
 
-//A get request for all notes for the /api/notes 
-route.get('/notes', (req, res) => {
-    res.json(notes)
-});
+    //Setting up notes variable for router
+    fs.readFile("./db/db.json", (data) => {
+        var notes = JSON.parse(data)
+    });
 
-//Get request to retrieve a specific note from its id
+    //A get request for all notes for the /api/notes 
+    route.get('/api/notes', (req, res) => {
+        res.json(notes)
+    });
 
-//Another request to delete a specific note from its id
+    //Get request to retrieve a specific note from its id
+
+    //Another request to delete a specific note from its id
 
 
-//A post route for the above get request
-route.post('/notes', (req, res) => {
-    let newNote = req.body
-    notes.push(newNote)
-    refreshNotes();
-});
+    //A post route for the above get request
+    route.post('/api/notes', (req, res) => {
+        let newNote = req.body
+        notes.push(newNote)
+        refreshNotes();
+    });
 
-//refresh function that renders display with recent changes made
-function refreshNotes(){
-    fs.writeFile('db/db.json', JSON.stringify(notes), (err) => {
-        if (err)
-            console.log(err);
-        else {
-            return true;
-        }
-    })
-};
+    //refresh function that renders display with recent changes made
+    function refreshNotes() {
+        fs.writeFile('db/db.json', JSON.stringify(notes), (err) => {
+            if (err)
+                console.log(err);
+            else {
+                return true;
+            }
+        })
+    };
 
-module.exports = route;
+}
