@@ -6,11 +6,11 @@ module.exports = htmlRoutes => {
 
     //Get request for * to return index.html
     route.get('*', (req, res) => {
-        res.render('./public/index')
+        res.sendFile(path.join(__dirname, '/public/index.html'))
     })
     //Get request for /notes to return notes.html
     route.get('/notes', (req, res) => {
-        res.render('./public/notes')
+        res.sendFile(path.join(__dirname, './public/notes'))
     })
 
 
