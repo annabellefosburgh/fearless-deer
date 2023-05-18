@@ -23,6 +23,33 @@ route.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, './public/notes'))
 })
 
+//Setting up notes variable to use for api get request
+fs.readFile("./db/db.json", (data) => {
+    var notes = JSON.parse(data)
+});
+
+route.get('/api/notes', (req, res) => {
+    res.json(notes)
+});
+
+ //A post route for the above get request
+ route.post('/api/notes', (req, res) => {
+    let newNote = req.body
+    notes.push(newNote)
+    refreshNotes();
+});
+
+//refresh function that renders display with recent changes made
+function refreshNotes() {
+    fs.writeFile('db/db.json', JSON.stringify(notes), (err) => {
+        if (err)
+            console.log(err);
+        else {
+            return true;
+        }
+    })
+};
+
 app.listen(PORT, () => {
     console.log("Port is running");
 })
