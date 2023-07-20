@@ -1,9 +1,9 @@
 //Requiring all docs and information being used in the server file.
 const fs = require('fs');
 const express = require('express');
-const noteRoute = require(noteRoutes)
-const htmlRoute = require(htmlRoutes);
-const path = require('path')
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+
 
 //Initializing express
 const app = express();
@@ -14,42 +14,49 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-//Get requests for the /note and * to send to appropriate html pages
-route.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
+//Get request for all saved notes
+app.get('/api/notes', (req, res) => {
+    fs.readFile('./db/db.json', (err, data) => {
+        if (err) throw err;
+        let dbData = JSON.parse(data);
+        res.json(dbData)
+    });   
 })
-//Get request for /notes to return notes.html
-route.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/notes'))
+
+//Post request for a new note to add to the rest of the notes
+app.post('/api/notes', (req, res) => {
+    const newNote = req.body
+    newNote.id = uuidv4()
+    db.push(newNote)
+    fs.writeFileSync('./db/db.json', JSON.stringify(db))
+    res.json(db)
 })
 
-//Setting up notes variable to use for api get request
-fs.readFile("./db/db.json", (data) => {
-    var notes = JSON.parse(data)
-});
+//Deletes a note by using it's specific id
+app.delete('/api/notes/:id', (req, res) => {
+    const newDb = db.filter((note) =>
+        note.id !== req.params.id)
+    fs.writeFileSync('./db/db.json', JSON.stringify(newDb))
+    readFile.json(newDb)
+})
 
-route.get('/api/notes', (req, res) => {
-    res.json(notes)
-});
+//Gets the home page and returns our index html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 
- //A post route for the above get request
- route.post('/api/notes', (req, res) => {
-    let newNote = req.body
-    notes.push(newNote)
-    refreshNotes();
-});
+//Grabs all notes and returns our notes html
+app.get('/notes', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'notes.html'))
+})
 
-//refresh function that renders display with recent changes made
-function refreshNotes() {
-    fs.writeFile('db/db.json', JSON.stringify(notes), (err) => {
-        if (err)
-            console.log(err);
-        else {
-            return true;
-        }
-    })
-};
+//Grabs our index html for anything else
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
+
+
 
 app.listen(PORT, () => {
-    console.log("Port is running");
+    console.log("Express web server running on port " + PORT);
 })
