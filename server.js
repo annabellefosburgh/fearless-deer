@@ -2,7 +2,6 @@
 const fs = require('fs');
 const express = require('express');
 const path = require('path');
-require('./api/notes')
 const { v4: uuidv4 } = require('uuid');
 
 //Initializing express
@@ -17,12 +16,12 @@ app.use(express.static('public'));
 
 //Gets the home page and returns our index html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.sendFile(path.join(__dirname, './public/index.html'))
 })
 
 //Grabs all notes and returns our notes html
 app.get('/notes', (req, res) =>
-    res.sendFile(path.join(__dirname, '/public/notes.html'))
+    res.sendFile(path.join(__dirname, './public/notes.html'))
 );
 
 // app.get("/assets/css/styles.css", (req, res) => {
